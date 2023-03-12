@@ -83,7 +83,7 @@ function ableToPlay() {
                     console.log("With userId: " + clientId.substring(0, 5));
                     console.log("< -------------------------- >");
                 } else {
-                    puntaje += 100;
+                    puntaje += 150;
                     console.log("-- Good Work! You gained " + puntaje + " points --");
                     console.log("With userId: " + clientId.substring(0, 5));
                     console.log("< -------------------------- >");
@@ -99,11 +99,22 @@ function ableToPlay() {
                 }
                 ws.send(JSON.stringify(payLoad));
 
+                puntaje = 0;
                 clicks = 0;
                 languages = [];
             }
         }
     });
+}
+
+function seAcabó(){
+    let terminado = true;
+    $('.card_item').each(function () {
+        if (!$(this).hasClass('lista')) {
+            terminado = false;
+        }
+    })
+    return terminado;
 }
 
 function voltearCarta(carta) {
@@ -126,6 +137,7 @@ function cartasDiferentes(iguales) {
             } else {
                 $('.volteada').each(function () {
                     $(this).removeClass('volteada');
+                    $(this).addClass('lista');
                 });
             }
             resolve();
@@ -194,6 +206,20 @@ ws.onmessage = message => {
                     yourTurn = true;
                 }
             } 
+
+            if (seAcabó()) {
+                // Se terminó el juego
+                let ganadorName = null;
+                let mayorPuntaje = 0;
+                const jugadores = response.game.clients;
+                jugadores.forEach((c, index) => {
+                    if (c.puntaje > mayorPuntaje) {
+                        mayorPuntaje = c.puntaje;
+                        ganadorName = c.clientName;
+                    }
+                })
+                alert("SE HA TERMINADO EL JUEGO\nGanador: " + ganadorName +"\nPuntos: " + mayorPuntaje);
+            }
         });
     }
 
