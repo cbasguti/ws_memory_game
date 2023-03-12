@@ -6,6 +6,9 @@ const app = express();
 // Menu principal
 app.get("/", (req, res) => res.sendFile(__dirname + "/client/index.html"));
 
+// Creacion de juego
+app.get("/crear-juego", (req, res) => res.sendFile(__dirname + "/client/create.html"));
+
 // El juego
 app.get("/partida", (req, res) => res.sendFile(__dirname + "/client/game.html"));
 
@@ -75,7 +78,8 @@ wsServer.on("request", request => {
             games[gameId] = {
                 "id": gameId,
                 "clients": [],
-                "pathArray": imgPaths2x
+                "pathArray": imgPaths2x,
+                "cardBack": result.cardBackId
             }
 
             const payLoad = {
@@ -88,8 +92,10 @@ wsServer.on("request", request => {
         }
 
         if (result.method === "join") {
+            console.log(result);
             const clientId = result.clientId;
             const gameId = result.gameId;
+            const nombre = result.clientName;
             const game = games[gameId];
 
             if (game.clients.length >= 2) {
@@ -99,7 +105,7 @@ wsServer.on("request", request => {
 
             game.clients.push({
                 "clientId": clientId,
-                "name": "Player" + clientId.substring(0, 5),
+                "clientName": nombre,
                 "puntaje": 0
             })
 

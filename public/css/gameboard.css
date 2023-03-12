@@ -1,8 +1,3 @@
-body {
-    background-image: url("../img/menu/wood-bg.jpg");
-    background-size: cover;
-}
-
 .board {
     display: flex;
     justify-content: center; /* centrar horizontalmente */
@@ -60,4 +55,26 @@ body {
     grid-template-columns: repeat(6, 100px);
     grid-gap: 1em;
     height: 40em;
+}
+
+button {
+    margin: 10px;
+    width: 30%;
+    height: 50px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #006F8B;
+}
+
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
 }

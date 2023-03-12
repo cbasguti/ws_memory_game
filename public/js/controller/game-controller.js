@@ -3,13 +3,16 @@ const params = new URLSearchParams(window.location.search);
 const create = params.get('create');
 const join = params.get('join');
 const joinId = params.get('gameId');
+const cardBackId = params.get('cardBack');
+const username = params.get('username');
+
 
 // Declaracion de variables
 let clientId = null;
 let gameId = null;
 let pathArray = null;
 let yourTurn = null;
-let ws = new WebSocket("ws://localhost:9090");
+let ws = new WebSocket("ws://192.168.1.3:9090");
 var clicks = 0;
 var languages = [];
 var cards = [];
@@ -19,7 +22,7 @@ var gameSet = false;
 /* < ---- Declaracion de Funciones ---- >*/
 
 // Crear las tarjetas
-function crearTarjetas(pathArray) {
+function crearTarjetas(pathArray, cardBackId) {
     // Seleccionar el contenedor de tarjetas
     const cardContainer = $(".card_container");
 
@@ -81,6 +84,9 @@ function ableToPlay() {
                     console.log("< -------------------------- >");
                 } else {
                     puntaje += 100;
+                    console.log("-- Good Work! You gained " + puntaje + " points --");
+                    console.log("With userId: " + clientId.substring(0, 5));
+                    console.log("< -------------------------- >");
                 }
 
                 let payLoad = {
@@ -107,19 +113,24 @@ function voltearCarta(carta) {
 }
 
 function cartasDiferentes(iguales) {
-    setTimeout(function () {
-        if (!iguales) {
-            $('.volteada').each(function () {
-                $(this).toggleClass('flipped');
-                $(this).removeClass('volteada');
-                $(this).addClass('sin_voltear');
-            });
-        } else {
-            $('.volteada').each(function () {
-                $(this).removeClass('volteada');
-            });
-        }
-    }, 800);
+    return new Promise(function(resolve, reject) {
+        // Tu código aquí
+        // Cuando la función termine de ejecutarse, resuelve la promesa
+        setTimeout(function () {
+            if (!iguales) {
+                $('.volteada').each(function () {
+                    $(this).toggleClass('flipped');
+                    $(this).removeClass('volteada');
+                    $(this).addClass('sin_voltear');
+                });
+            } else {
+                $('.volteada').each(function () {
+                    $(this).removeClass('volteada');
+                });
+            }
+            resolve();
+        }, 800);
+    });
 }
 
 ws.onmessage = message => {
@@ -131,12 +142,12 @@ ws.onmessage = message => {
 
         console.log("-- Connected Succesfully --");
         console.log("< -------------------------- >");
+        $("#btnCreate").trigger("click");
     }
 
     if (response.method === "create") {
         gameId = response.game.id;
 
-        alert(gameId);
         console.log("Join as Owner: " + gameId);
         console.log("With userId: " + clientId.substring(0, 5));
         console.log("< -------------------------- >");
@@ -144,6 +155,7 @@ ws.onmessage = message => {
         payLoad = {
             "method": "join",
             "clientId": clientId,
+            "clientName": username,
             "gameId": gameId
         }
         ws.send(JSON.stringify(payLoad));
@@ -152,8 +164,11 @@ ws.onmessage = message => {
     if (response.method === "join") {
         gameId = response.game.id;
         pathArray = response.game.pathArray;
+        console.log(response);
         response.game.clients.forEach((c, index) => {
             console.log('Player ' + (index + 1) + ' ID: ' + c.clientId.substring(0, 10));
+            console.log('Player ' + (index + 1) + ' Name: ' + c.clientName);
+            console.log("< -------------------------- >");
         })
         if (!gameSet && pathArray !== null) {
             crearTarjetas(pathArray);
@@ -165,16 +180,21 @@ ws.onmessage = message => {
     }
 
     if (response.method === "played") {
-        cartasDiferentes(response.sameCards);
-        if (response.playedBy == clientId) {
-            $('.card_item').each(function () {
-                $(this).off('click');
-            });
-            yourTurn = false;
-        } else {
-            ableToPlay();
-            yourTurn = true;
-        }
+        cartasDiferentes(response.sameCards).then(function() {
+            if (response.sameCards) {
+                // Keep playing
+            } else {
+                if (response.playedBy == clientId) {
+                    $('.card_item').each(function () {
+                        $(this).off('click');
+                    });
+                    yourTurn = false;
+                } else {
+                    ableToPlay();
+                    yourTurn = true;
+                }
+            } 
+        });
     }
 
     if (response.method === "one-click") {
@@ -199,7 +219,8 @@ $(document).ready(function () {
 
             let payLoad = {
                 "method": "create",
-                "clientId": clientId
+                "clientId": clientId,
+                "cardBack": cardBackId
             }
             ws.send(JSON.stringify(payLoad));
             $(this).hide();
@@ -215,6 +236,7 @@ $(document).ready(function () {
             const payLoad = {
                 "method": "join",
                 "clientId": clientId,
+                "clientName": username,
                 "gameId": joinId
             }
             ws.send(JSON.stringify(payLoad));
