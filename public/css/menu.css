@@ -1,0 +1,95 @@
+body {
+    background-image: url("../img/menu/wood-bg.jpg");
+    background-size: cover;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1%;
+}
+
+.logo_container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.logo_lt {
+    margin-right: 10px;
+}
+
+.logo_rit {
+    margin-left: 10px;
+}
+
+.game_logo {
+    width: 30em;
+}
+
+.game_title {
+    font-size: 3rem;
+    color: rgb(0, 0, 0);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+}
+
+input {
+    margin: 10px;
+    width: 100% !important;
+    height: 50px;
+    font-size: medium;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding-left: 15px;
+}
+
+input::placeholder {
+    font-size: medium;
+}
+
+button {
+    margin: 10px;
+    width: 100% !important;
+    height: 50px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #006F8B;
+}
+
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
