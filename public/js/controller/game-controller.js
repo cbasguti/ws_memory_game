@@ -5,6 +5,7 @@ const join = params.get('join');
 const joinId = params.get('gameId');
 const cardBackId = params.get('cardBack');
 const username = params.get('username');
+const port = process.env.PORT || 3000;
 
 
 // Declaracion de variables
@@ -12,7 +13,7 @@ let clientId = null;
 let gameId = null;
 let pathArray = null;
 let yourTurn = null;
-let ws = new WebSocket("ws://localhost:9090");
+let ws = new WebSocket("ws://${window.location.hostname}:${port}");
 var clicks = 0;
 var languages = [];
 var cards = [];
