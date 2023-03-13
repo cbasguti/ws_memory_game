@@ -13,11 +13,11 @@ app.get("/crear-juego", (req, res) => res.sendFile(__dirname + "/client/create.h
 // El juego
 app.get("/partida", (req, res) => res.sendFile(__dirname + "/client/game.html"));
 
-app.listen((port + 1), () => console.log("Listening... on http port" + (port + 1)));
+app.listen(port, () => console.log("Listening... on http port 9091"));
 app.use(express.static(path.join(__dirname, "public")));
 const websocketServer = require("websocket").server;
 const httpServer = http.createServer();
-httpServer.listen(port, () => console.log("Listening... on " + port));
+httpServer.listen(9090, () => console.log("Listening... on 9090"));
 
 // Hashmap
 const clients = {};
