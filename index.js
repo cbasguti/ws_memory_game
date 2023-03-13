@@ -56,6 +56,7 @@ wsServer.on("request", request => {
         // Se recibe un mensaje
 
         if (result.method === "create") {
+            console.log(result);
             const clientId = result.clientId;
             const gameId = guid();
             const imgPaths = [
@@ -79,7 +80,7 @@ wsServer.on("request", request => {
                 "id": gameId,
                 "clients": [],
                 "pathArray": imgPaths2x,
-                "cardBack": result.cardBackId
+                "cardBack": result.cardBack
             }
 
             const payLoad = {

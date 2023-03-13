@@ -37,7 +37,7 @@ function crearTarjetas(pathArray, cardBackId) {
 
         // Crear el elemento de la parte delantera
         const front = $("<div>").addClass("card_front");
-        const frontImg = $("<img>").addClass("card-img").addClass(imgClass).attr("src", "/img/cardback3.png").attr("alt", "Card image cap").attr("value", i);
+        const frontImg = $("<img>").addClass("card-img").addClass(imgClass).attr("src", "/img/cardback" + cardBackId + ".png").attr("alt", "Card image cap").attr("value", i);
         front.append(frontImg);
 
         // Crear el elemento de la parte trasera
@@ -175,6 +175,7 @@ ws.onmessage = message => {
 
     if (response.method === "join") {
         gameId = response.game.id;
+        cardBack = response.game.cardBack;
         pathArray = response.game.pathArray;
         console.log(response);
         response.game.clients.forEach((c, index) => {
@@ -183,7 +184,7 @@ ws.onmessage = message => {
             console.log("< -------------------------- >");
         })
         if (!gameSet && pathArray !== null) {
-            crearTarjetas(pathArray);
+            crearTarjetas(pathArray, cardBack);
             gameSet = true;
         }
         if (yourTurn) {
