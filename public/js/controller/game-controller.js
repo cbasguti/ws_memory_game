@@ -8,11 +8,12 @@ const username = params.get('username');
 
 
 // Declaracion de variables
+var HOST = location.origin.replace('http', 'ws');
 let clientId = null;
 let gameId = null;
 let pathArray = null;
 let yourTurn = null;
-let ws = new WebSocket("wss://code-memory.herokuapp.com");
+let ws = new WebSocket(HOST);
 var clicks = 0;
 var languages = [];
 var cards = [];
