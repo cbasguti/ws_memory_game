@@ -8,12 +8,11 @@ const username = params.get('username');
 
 
 // Declaracion de variables
-var HOST = location.origin.replace('http', 'ws');
 let clientId = null;
 let gameId = null;
 let pathArray = null;
 let yourTurn = null;
-let ws = new WebSocket(HOST);
+let ws = new WebSocket(`wss://${window.location.hostname}`);
 var clicks = 0;
 var languages = [];
 var cards = [];
