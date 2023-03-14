@@ -14,7 +14,7 @@ app.get("/crear-juego", (req, res) => res.sendFile(__dirname + "/client/create.h
 // El juego
 app.get("/partida", (req, res) => res.sendFile(__dirname + "/client/game.html"));
 
-app.listen(port, () => console.log("Listening... on http port " + port));
+const realServer = app.listen(port, () => console.log("Listening... on http port " + port));
 app.use(express.static(path.join(__dirname, "public")));
 const websocketServer = require("websocket").server;
 const httpServer = http.createServer();
@@ -44,7 +44,7 @@ function shuffle(array) {
 }
 
 const wsServer = new websocketServer({
-    "httpServer": httpServer
+    "httpServer": realServer
 });
 
 wsServer.on("request", request => {
