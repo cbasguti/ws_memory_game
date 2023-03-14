@@ -1,0 +1,80 @@
+.board {
+    display: flex;
+    justify-content: center; /* centrar horizontalmente */
+    align-items: center; /* centrar verticalmente */
+    height: 100vh;
+}
+
+.card_back {
+    background-color: whitesmoke;
+}
+
+.game_title {
+    text-align: center;
+    margin: 1.5rem;
+}
+
+.card_item {
+    height: auto;
+    border-radius: 10px;
+    padding: 1px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+}
+
+.card_front, .card_back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.card_front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.card_back {
+    border-style: outset;
+    border-radius: 10px;
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card_item.flipped {
+    transform: rotateY(180deg);
+}
+
+.card_container {
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    grid-gap: 1em;
+    height: 40em;
+}
+
+button {
+    margin: 10px;
+    width: 30%;
+    height: 50px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #006F8B;
+}
+
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
