@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+const newPort = parseInt(process.env.PORT || 3000) + 1;
 
 // Menu principal
 app.get("/", (req, res) => res.sendFile(__dirname + "/client/index.html"));
@@ -13,11 +14,11 @@ app.get("/crear-juego", (req, res) => res.sendFile(__dirname + "/client/create.h
 // El juego
 app.get("/partida", (req, res) => res.sendFile(__dirname + "/client/game.html"));
 
-app.listen(port, () => console.log("Listening... on http port" + port));
+app.listen(port, () => console.log("Listening... on http port " + port));
 app.use(express.static(path.join(__dirname, "public")));
 const websocketServer = require("websocket").server;
 const httpServer = http.createServer();
-httpServer.listen(9090, () => console.log("Listening... on " + 9090));
+httpServer.listen(newPort, () => console.log("Listening... on " + newPort));
 
 // Hashmap
 const clients = {};
