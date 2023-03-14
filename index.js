@@ -13,7 +13,7 @@ app.get("/crear-juego", (req, res) => res.sendFile(__dirname + "/client/create.h
 // El juego
 app.get("/partida", (req, res) => res.sendFile(__dirname + "/client/game.html"));
 
-app.listen(9091, () => console.log("Listening... on http port 9091"));
+app.listen(port, () => console.log("Listening... on http port" + port));
 app.use(express.static(path.join(__dirname, "public")));
 const websocketServer = require("websocket").server;
 const httpServer = http.createServer();
