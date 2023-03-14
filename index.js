@@ -17,7 +17,7 @@ app.listen(9091, () => console.log("Listening... on http port 9091"));
 app.use(express.static(path.join(__dirname, "public")));
 const websocketServer = require("websocket").server;
 const httpServer = http.createServer();
-httpServer.listen(port, () => console.log("Listening... on " + port));
+httpServer.listen(9090, () => console.log("Listening... on " + 9090));
 
 // Hashmap
 const clients = {};
