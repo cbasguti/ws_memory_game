@@ -24,14 +24,47 @@
 </head>
 
 <body>
-    <h1 class="game_title" style="display: none;">Tablero de Juego</h1>
-    <p class="user_id">
-        <!-- El id del jugador -->
-    </p>
+    <!-- Boton importante -->
     <button id="btnCreate">Iniciar</button>
+
+    <!-- Contenedor del codigo -->
+    <div class="card_container_header">
+        <h2>CODIGO: </h2>
+    </div>
+
+    <!-- Tablero de juego -->
     <div class="board">
+
+        <!-- Perfil de jugador a la izquierda -->
+        <div class="player_profile left">
+            <img class="profile_pic" src="/img/characters/jugador1.png" alt="Imagen de perfil">
+            <div class="player_name_score">
+                <h3>Jugador A</h3>
+                <p>Puntos: <span class="score">0</span></p>
+            </div>
+        </div>
+
+        <!-- Perfil de jugador a la derecha -->
+        <div class="player_profile right">
+            <img class="profile_pic" src="/img/characters/jugador2.png" alt="Imagen de perfil">
+            <div class="player_name_score">
+                <h3>Jugador B</h3>
+                <p>Puntos: <span class="score">0</span></p>
+            </div>
+        </div>
+
         <div class="card_container">
             <!-- Aqui van las tarjetas -->
+        </div>
+    </div>
+
+    <!-- Codigo del Pop Up -->
+    <div class="popup">
+        <div class="popup_content">
+            <h2>Ganador: jugador X</h2>
+            <p>Texto de prueba</p>
+            <img src="/img/popup/winner.gif" alt="Imagen de referencia">
+            <button id="btnMenu">Volver al menú</button>
         </div>
     </div>
 </body>
