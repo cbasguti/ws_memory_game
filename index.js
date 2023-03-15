@@ -58,7 +58,7 @@ wsServer.on("request", request => {
         // Se recibe un mensaje
 
         if (result.method === "create") {
-            console.log(result);
+            // console.log(result);
             const clientId = result.clientId;
             const gameId = guid();
             const imgPaths = [
@@ -95,11 +95,19 @@ wsServer.on("request", request => {
         }
 
         if (result.method === "join") {
-            console.log(result);
             const clientId = result.clientId;
             const gameId = result.gameId;
             const nombre = result.clientName;
             const game = games[gameId];
+
+            // Validar si el juego existe
+            if (!game) {
+                const payLoad = {
+                    "method": "game_not_found"
+                }
+                clients[clientId].connection.send(JSON.stringify(payLoad));
+                return;
+            }
 
             if (game.clients.length >= 2) {
                 // Max players reach
@@ -123,13 +131,14 @@ wsServer.on("request", request => {
         }
 
         if (result.method === "played") {
+            console.log(result);
             const clientId = result.clientId;
             const gameId = result.gameId;
             const game = games[gameId];
             const client = game.clients.find(c => c.clientId === clientId);
 
             if (client) {
-                client.puntaje += result.points;
+                client.puntaje = client.puntaje + result.points;
             }
 
             const payLoad = {

@@ -19,6 +19,7 @@ var cards = [];
 var puntaje = 0;
 var gameSet = false;
 
+
 /* < ---- Declaracion de Funciones ---- >*/
 
 // Crear las tarjetas
@@ -83,7 +84,11 @@ function ableToPlay() {
                     console.log("With userId: " + clientId.substring(0, 5));
                     console.log("< -------------------------- >");
                 } else {
-                    puntaje += 150;
+                    puntaje = 150;
+                    userclass = "." + clientId;
+                    let puntajeActual = parseInt($(userclass).find(".score").text());  
+                    puntajeActual += 150;
+                    $(userclass).find(".score").text(puntajeActual);
                     console.log("-- Good Work! You gained " + puntaje + " points --");
                     console.log("With userId: " + clientId.substring(0, 5));
                     console.log("< -------------------------- >");
@@ -164,6 +169,10 @@ ws.onmessage = message => {
         console.log("With userId: " + clientId.substring(0, 5));
         console.log("< -------------------------- >");
 
+        gameIdText = $(".card_container_header").find("h2").text();
+        gameIdText += gameId;
+        $(".card_container_header").find("h2").text(gameIdText);
+
         payLoad = {
             "method": "join",
             "clientId": clientId,
@@ -174,6 +183,7 @@ ws.onmessage = message => {
     }
 
     if (response.method === "join") {
+        let playerOne;
         gameId = response.game.id;
         cardBack = response.game.cardBack;
         pathArray = response.game.pathArray;
@@ -182,7 +192,17 @@ ws.onmessage = message => {
             console.log('Player ' + (index + 1) + ' ID: ' + c.clientId.substring(0, 10));
             console.log('Player ' + (index + 1) + ' Name: ' + c.clientName);
             console.log("< -------------------------- >");
-        })
+
+            if (index == 0) {
+                $(".left").find("h3").text(c.clientName);
+                $(".left").addClass(c.clientId);
+            } else {
+                $(".right").show();
+                $(".card_container_header").hide();
+                $(".right").find("h3").text(c.clientName);
+                $(".right").addClass(c.clientId);
+            }
+        });
         if (!gameSet && pathArray !== null) {
             crearTarjetas(pathArray, cardBack);
             gameSet = true;
@@ -193,6 +213,13 @@ ws.onmessage = message => {
     }
 
     if (response.method === "played") {
+        const jugadores = response.game.clients;
+
+        jugadores.forEach(c => {
+            let userclass = "." + c.clientId;
+            $(userclass).find(".score").text(c.puntaje);
+        })
+
         cartasDiferentes(response.sameCards).then(function() {
             if (response.sameCards) {
                 // Keep playing
@@ -212,14 +239,16 @@ ws.onmessage = message => {
                 // Se terminó el juego
                 let ganadorName = null;
                 let mayorPuntaje = 0;
-                const jugadores = response.game.clients;
                 jugadores.forEach((c, index) => {
                     if (c.puntaje > mayorPuntaje) {
                         mayorPuntaje = c.puntaje;
                         ganadorName = c.clientName;
                     }
                 })
-                alert("SE HA TERMINADO EL JUEGO\nGanador: " + ganadorName +"\nPuntos: " + mayorPuntaje);
+                $(".popup").find("h2").text("¡"+ ganadorName + " ha ganado el juego!");
+                $(".popup").find("p").text("Ha obtenido " + mayorPuntaje + " puntos");
+                $(".popup").css("display", "flex");
+                // alert("SE HA TERMINADO EL JUEGO\nGanador: " + ganadorName +"\nPuntos: " + mayorPuntaje);
             }
         });
     }
@@ -233,9 +262,20 @@ ws.onmessage = message => {
             }
         });
     }
+
+    if (response.method === "game_not_found") {
+        alert("Parece que no hay un juego con este codigo");
+        window.location.href = "/";
+    }
 }
 
 $(document).ready(function () {
+    $(".popup").hide();
+
+    $("#btnMenu").on("click", function () {
+        window.location.href = "/";
+    });
+
     // Validacion de parametros
     if (create !== null && create === 'true') {
         yourTurn = true;
