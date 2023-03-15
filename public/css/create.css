@@ -88,6 +88,7 @@ button:disabled {
     background-color: gray;
     cursor: not-allowed;
 }
+
 .container {
     display: flex;
     flex-direction: column;
@@ -177,4 +178,24 @@ button:hover {
 button:disabled {
     background-color: gray;
     cursor: not-allowed;
+}
+
+/* Cambiar color de texto de los labels */
+label {
+    color: white;
+}
+
+/* Cambiar fuente de todo el formulario */
+body,
+input,
+select,
+label,
+button {
+    font-family: sans-serif;
+}
+
+/* Hacer el select del mismo ancho y alto que el input */
+select {
+    width: 100%;
+    height: 50px;
 }
