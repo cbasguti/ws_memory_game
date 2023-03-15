@@ -72,21 +72,27 @@ function ableToPlay() {
 
             if (clicks >= 2) {
 
+                $('#overlay').css('display', 'block');
+
                 let iguales = languages.every(function (element) {
                     return element === languages[0];
                 });
 
-                cartasDiferentes(iguales);
+                cartasDiferentes(iguales).then(function () {
+                    $('#overlay').css('display', 'none');
+                });
 
                 if (!iguales) {
                     // Acabo su turno
                     console.log("-- Your Turn is Over --");
                     console.log("With userId: " + clientId.substring(0, 5));
                     console.log("< -------------------------- >");
+                    
                 } else {
+                    
                     puntaje = 150;
                     userclass = "." + clientId;
-                    let puntajeActual = parseInt($(userclass).find(".score").text());  
+                    let puntajeActual = parseInt($(userclass).find(".score").text());
                     puntajeActual += 150;
                     $(userclass).find(".score").text(puntajeActual);
                     console.log("-- Good Work! You gained " + puntaje + " points --");
@@ -112,7 +118,7 @@ function ableToPlay() {
     });
 }
 
-function seAcabó(){
+function seAcabó() {
     let terminado = true;
     $('.card_item').each(function () {
         if (!$(this).hasClass('lista')) {
@@ -129,7 +135,7 @@ function voltearCarta(carta) {
 }
 
 function cartasDiferentes(iguales) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         // Tu código aquí
         // Cuando la función termine de ejecutarse, resuelve la promesa
         setTimeout(function () {
@@ -164,7 +170,7 @@ ws.onmessage = message => {
 
     if (response.method === "create") {
         gameId = response.game.id;
-
+        $('#overlay').css('display', 'block');
         console.log("Join as Owner: " + gameId);
         console.log("With userId: " + clientId.substring(0, 5));
         console.log("< -------------------------- >");
@@ -183,7 +189,6 @@ ws.onmessage = message => {
     }
 
     if (response.method === "join") {
-        let playerOne;
         gameId = response.game.id;
         cardBack = response.game.cardBack;
         pathArray = response.game.pathArray;
@@ -197,6 +202,7 @@ ws.onmessage = message => {
                 $(".left").find("h3").text(c.clientName);
                 $(".left").addClass(c.clientId);
             } else {
+                $('#overlay').css('display', 'none');
                 $(".right").show();
                 $(".card_container_header").hide();
                 $(".right").find("h3").text(c.clientName);
@@ -220,7 +226,7 @@ ws.onmessage = message => {
             $(userclass).find(".score").text(c.puntaje);
         })
 
-        cartasDiferentes(response.sameCards).then(function() {
+        cartasDiferentes(response.sameCards).then(function () {
             if (response.sameCards) {
                 // Keep playing
             } else {
@@ -233,7 +239,7 @@ ws.onmessage = message => {
                     ableToPlay();
                     yourTurn = true;
                 }
-            } 
+            }
 
             if (seAcabó()) {
                 // Se terminó el juego
@@ -245,7 +251,7 @@ ws.onmessage = message => {
                         ganadorName = c.clientName;
                     }
                 })
-                $(".popup").find("h2").text("¡"+ ganadorName + " ha ganado el juego!");
+                $(".popup").find("h2").text("¡" + ganadorName + " ha ganado el juego!");
                 $(".popup").find("p").text("Ha obtenido " + mayorPuntaje + " puntos");
                 $(".popup").css("display", "flex");
                 // alert("SE HA TERMINADO EL JUEGO\nGanador: " + ganadorName +"\nPuntos: " + mayorPuntaje);
